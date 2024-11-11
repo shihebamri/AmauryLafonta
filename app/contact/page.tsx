@@ -236,9 +236,12 @@ export default function ContactPage() {
               <p className="text-white font-light">Email : contact@amaurylafonta.com</p>
             </div>
           </div>
-          <div className="mt-8 text-center text-white font-light">
-            © 2024 Amaury Lafonta. Tous droits réservés.
-          </div>
+            <div className="mt-8 text-center text-white font-light">
+  © 2024 Amaury Lafonta. Tous droits réservés.
+             <br />
+  Designed by <a href="https://www.facebook.com/shiheb.amrii" target="_blank" rel="noopener noreferrer" className="underline">Chiheb Amri</a>
+             </div>
+
         </div>
       </footer>
     </div>

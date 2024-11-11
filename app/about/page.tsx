@@ -299,9 +299,12 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-white text-center">
-            <p className="text-white font-light">&copy; 2023 Amaury Lafonta. Tous droits réservés.</p>
-          </div>
+            <div className="mt-8 text-center text-white font-light">
+  © 2024 Amaury Lafonta. Tous droits réservés.
+             <br />
+  Designed by <a href="https://www.facebook.com/shiheb.amrii" target="_blank" rel="noopener noreferrer" className="underline">Chiheb Amri</a>
+             </div>
+
         </div>
       </footer>
     </div>
