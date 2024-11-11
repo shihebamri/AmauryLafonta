@@ -202,7 +202,7 @@ export default function ContactPage() {
           <h2 className={`text-3xl md:text-4xl font-bold mb-8 text-center text-white ${playfairDisplay.className}`}>Nous Trouver</h2>
           <div className="aspect-w-16 aspect-h-9">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3274.885193035013!2d10.663746775441812!3d34.83397897605052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1301d7006235cde1%3A0xfb0fd4030e2aac39!2sles%20d%C3%A9lices%20de%20Hj!5e0!3m2!1sen!2stn!4v1729872525945!5m2!1sen!2stn"             
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2763.461674742845!2d-1.1522771240057312!3d46.16146478664724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4801536999474eaf%3A0xac04a4706780b30e!2sAmaury%20Lafonta%20P%C3%A2tisserie!5e0!3m2!1sen!2stn!4v1731305899809!5m2!1sen!2stn"
               width="100%"
               height="450"
               style={{ border: 0 }}
