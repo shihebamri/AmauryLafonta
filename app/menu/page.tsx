@@ -1,16 +1,16 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, useAnimation } from 'framer-motion'
-import { ChevronDown, Menu, Instagram, Facebook, Twitter, ChevronLeft, ChevronRight } from 'lucide-react'
+import { motion, useAnimation, AnimatePresence } from 'framer-motion'
+import { ChevronDown, Menu, Instagram, Facebook, Twitter, ChevronLeft, ChevronRight, ShoppingCart, X } from 'lucide-react'
 import { Card, CardContent } from "@/components/ui/card"
 import Link from 'next/link'
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Parallax } from 'react-parallax'
 
-import { Playfair_Display,   Cormorant_Garamond } from 'next/font/google'
+import { Playfair_Display, Cormorant_Garamond } from 'next/font/google'
 
 const playfairDisplay = Playfair_Display({ subsets: ['latin'] })
 const cormorantGaramond = Cormorant_Garamond({ subsets: ['latin'], weight: ['300', '400', '600'] })
@@ -19,30 +19,30 @@ const menuCategories = [
   {
     "name": "Gâteaux",
     "items": [
-        {
-            "name": "Éclair au Chocolat",
-            "price": "4,00 €",
-            "description": "Pâtisserie à base de pâte à choux, fourrée de crème au chocolat",
-            "image": "/g.jpg"
-        },
-        {
-            "name": "Tarte aux Fraises",
-            "price": "5,50 €",
-            "description": "Tarte garnie de crème pâtissière et de fraises fraîches",
-            "image": "/g.jpg"
-        },
-        {
-            "name": "Mille-Feuille",
-            "price": "4,50 €",
-            "description": "Feuilleté à la crème pâtissière vanille",
-            "image": "/g.jpg"
-        },
-        {
-            "name": "Opéra",
-            "price": "6,00 €",
-            "description": "Gâteau à couches de biscuit Joconde, crème au beurre café, et ganache chocolat",
-            "image": "/g.jpg"
-        }
+      {
+        "name": "Éclair au Chocolat",
+        "price": "4,00 €",
+        "description": "Pâtisserie à base de pâte à choux, fourrée de crème au chocolat",
+        "image": "/g.jpg"
+      },
+      {
+        "name": "Tarte aux Fraises",
+        "price": "5,50 €",
+        "description": "Tarte garnie de crème pâtissière et de fraises fraîches",
+        "image": "/g.jpg"
+      },
+      {
+        "name": "Mille-Feuille",
+        "price": "4,50 €",
+        "description": "Feuilleté à la crème pâtissière vanille",
+        "image": "/g.jpg"
+      },
+      {
+        "name": "Opéra",
+        "price": "6,00 €",
+        "description": "Gâteau à couches de biscuit Joconde, crème au beurre café, et ganache chocolat",
+        "image": "/g.jpg"
+      }
     ]
   }
 ];
@@ -60,6 +60,8 @@ export default function MenuPage() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeCategory, setActiveCategory] = useState(menuCategories[0].name)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [cart, setCart] = useState<Array<{ name: string; price: string; quantity: number }>>([])
+  const [isCartOpen, setIsCartOpen] = useState(false)
 
   useEffect(() => {
     if (menuCategories.length > 0) {
@@ -83,51 +85,89 @@ export default function MenuPage() {
     }
   }
 
+  const addToCart = (item: { name: string; price: string }) => {
+    setCart(prevCart => {
+      const existingItem = prevCart.find(cartItem => cartItem.name === item.name)
+      if (existingItem) {
+        return prevCart.map(cartItem =>
+          cartItem.name === item.name ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+        )
+      } else {
+        return [...prevCart, { ...item, quantity: 1 }]
+      }
+    })
+  }
+
+  const removeFromCart = (itemName: string) => {
+    setCart(prevCart => prevCart.filter(item => item.name !== itemName))
+  }
+
+  const getTotalPrice = () => {
+    return cart.reduce((total, item) => {
+      const price = parseFloat(item.price.replace(',', '.').replace('€', ''))
+      return total + price * item.quantity
+    }, 0).toFixed(2)
+  }
+
+  const sendOrderToWhatsApp = () => {
+    const phoneNumber = "+21653400440" // Replace with your actual WhatsApp number
+    const message = `Nouvelle commande:\n\n${cart.map(item => `${item.name} x${item.quantity} - ${item.price}`).join('\n')}\n\nTotal: ${getTotalPrice()} €`
+    const encodedMessage = encodeURIComponent(message)
+    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank')
+  }
+
   return (
     <div className={`bg-[#262F58] text-white min-h-screen ${cormorantGaramond.className}`}>
       {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#262F58] py-2' : 'bg-transparent py-4'}`}>
-        <div className="container mx-auto px-6 flex justify-between items-center">
-          <Link href="/" >
-            <img src="/logo.jpg" alt="Amaury Lafonta" className="w-12 h-12 rounded-full" />
+<nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#262F58] py-2' : 'bg-transparent py-4'}`}>
+  <div className="container mx-auto px-6 flex justify-between items-center">
+    <Link href="/" >
+      <img src="/logo.jpg" alt="Amaury Lafonta" className="w-12 h-12 rounded-full" />
+    </Link>
+    <div className="hidden md:flex space-x-6">
+      <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        Menu
+      </Link>
+      <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        À propos
+      </Link>
+      <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        Contact
+      </Link>
+      <Link href="/res" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        Réservation
+      </Link>
+    </div>
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline" size="icon" className="md:hidden">
+          <Menu className="h-6 w-6 text-white" />
+          <span className="sr-only">Toggle menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="right" className="bg-[#262F58] p-6 w-64">
+        <div className="flex flex-col space-y-4">
+          <Link href="/" className={`text-2xl font-bold text-white mb-6 ${playfairDisplay.className}`}>
+            Amaury Lafonta
           </Link>
-          <div className="hidden md:flex space-x-6">
-            <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-              Menu
-            </Link>
-            <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-              À propos
-            </Link>
-            <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-              Contact
-            </Link>
-          </div>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden">
-                <Menu className="h-6 w-6 text-white" />
-                <span className="sr-only">Ouvrir le menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="bg-[#262F58] p-6 w-64">
-              <div className="flex flex-col space-y-4">
-                <Link href="/" className={`text-2xl font-bold text-white mb-6 ${playfairDisplay.className}`}>
-                  Amaury Lafonta
-                </Link>
-                <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-                  Menu
-                </Link>
-                <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-                  À propos
-                </Link>
-                <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-                  Contact
-                </Link>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            Menu
+          </Link>
+          <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            À propos
+          </Link>
+          <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            Contact
+          </Link>
+          <Link href="/res" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            Réservation
+          </Link>
         </div>
-      </nav>
+      </SheetContent>
+    </Sheet>
+  </div>
+</nav>
+
 
       {/* Hero Section */}
       <Parallax
@@ -229,6 +269,12 @@ export default function MenuPage() {
                         <p className="text-[#262F58] mb-4 h-20 overflow-hidden font-light">{item.description}</p>
                         <div className="flex justify-between items-center">
                           <p className={`text-[#262F58] font-bold ${playfairDisplay.className}`}>{item.price}</p>
+                          <Button 
+                            onClick={() => addToCart(item)}
+                            className="bg-[#262F58] text-white hover:bg-opacity-90"
+                          >
+                            Commander
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
@@ -239,6 +285,52 @@ export default function MenuPage() {
           ))}
         </div>
       </section>
+
+      {/* Floating Cart Button */}
+      <AnimatePresence>
+        {cart.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-4 right-4 z-50"
+          >
+            <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+              <SheetTrigger asChild>
+                <Button className="bg-[#262F58] text-white rounded-full p-4 shadow-lg">
+                  <ShoppingCart className="w-6 h-6" />
+                  <span className="ml-2">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="bottom" className="bg-white rounded-t-3xl">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className={`text-2xl font-bold text-[#262F58] ${playfairDisplay.className}`}>Votre Commande</h2>
+
+                </div>
+                <ScrollArea className="h-[50vh]">
+                  {cart.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center py-2 border-b">
+                      <div>
+                        <p className={`text-[#262F58] font-semibold ${playfairDisplay.className}`}>{item.name}</p>
+                        <p className="text-sm text-gray-600">{item.price} x {item.quantity}</p>
+                      </div>
+                      <Button variant="destructive" size="sm" onClick={() => removeFromCart(item.name)}>
+                        Supprimer
+                      </Button>
+                    </div>
+                  ))}
+                </ScrollArea>
+                <div className="mt-4">
+                  <p className={`text-xl font-bold text-[#262F58] ${playfairDisplay.className}`}>Total: {getTotalPrice()} €</p>
+                  <Button className="w-full mt-4 bg-[#262F58] text-white" onClick={sendOrderToWhatsApp}>
+                    Envoyer la commande sur WhatsApp
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Call to Action */}
       <Parallax
@@ -315,12 +407,11 @@ export default function MenuPage() {
               </div>
             </div>
           </div>
-            <div className="mt-8 text-center text-white font-light">
-  © 2024 Amaury Lafonta. Tous droits réservés.
-             <br />
-  Designed by <a href="https://www.facebook.com/shiheb.amrii" target="_blank" rel="noopener noreferrer" className="underline">Chiheb Amri</a>
-             </div>
-
+          <div className="mt-8 text-center text-white font-light">
+            © 2024 Amaury Lafonta. Tous droits réservés.
+            <br />
+            Designed by <a href="https://www.facebook.com/shiheb.amrii" target="_blank" rel="noopener noreferrer" className="underline">Chiheb Amri</a>
+          </div>
         </div>
       </footer>
     </div>

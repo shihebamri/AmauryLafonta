@@ -40,48 +40,55 @@ export default function HomePage() {
   return (
     <div className={`bg-[#262F58] text-white min-h-screen ${cormorantGaramond.className}`}>
       {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#262F58] py-2' : 'bg-transparent py-4'}`}>
-        <div className="container mx-auto px-6 flex justify-between items-center">
-          <Link href="/" >
-            <img src="/logo.jpg" alt="Amaury Lafonta" className="w-12 h-12 rounded-full" />
+<nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#262F58] py-2' : 'bg-transparent py-4'}`}>
+  <div className="container mx-auto px-6 flex justify-between items-center">
+    <Link href="/" >
+      <img src="/logo.jpg" alt="Amaury Lafonta" className="w-12 h-12 rounded-full" />
+    </Link>
+    <div className="hidden md:flex space-x-6">
+      <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        Menu
+      </Link>
+      <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        À propos
+      </Link>
+      <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        Contact
+      </Link>
+      <Link href="/res" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        Réservation
+      </Link>
+    </div>
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline" size="icon" className="md:hidden">
+          <Menu className="h-6 w-6 text-white" />
+          <span className="sr-only">Toggle menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="right" className="bg-[#262F58] p-6 w-64">
+        <div className="flex flex-col space-y-4">
+          <Link href="/" className={`text-2xl font-bold text-white mb-6 ${playfairDisplay.className}`}>
+            Amaury Lafonta
           </Link>
-          <div className="hidden md:flex space-x-6">
-            <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-              Menu
-            </Link>
-            <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-              À propos
-            </Link>
-            <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-              Contact
-            </Link>
-          </div>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden">
-                <Menu className="h-6 w-6 text-white" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="bg-[#262F58] p-6 w-64">
-              <div className="flex flex-col space-y-4">
-                <Link href="/" className={`text-2xl font-bold text-white mb-6 ${playfairDisplay.className}`}>
-                  Amaury Lafonta
-                </Link>
-                <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-                  Menu
-                </Link>
-                <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-                  À propos
-                </Link>
-                <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-                  Contact
-                </Link>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            Menu
+          </Link>
+          <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            À propos
+          </Link>
+          <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            Contact
+          </Link>
+          <Link href="/res" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            Réservation
+          </Link>
         </div>
-      </nav>
+      </SheetContent>
+    </Sheet>
+  </div>
+</nav>
+
 
       {/* Hero Section */}
       <header className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -246,6 +253,29 @@ export default function HomePage() {
           </div>
         </section>
       </Parallax>
+
+      <section className="py-20 px-4 md:px-0 bg-white">
+        <div className="container mx-auto">
+          <motion.h2
+            ref={ref}
+            animate={controls}
+            variants={fadeIn}
+            className={`text-4xl md:text-5xl font-bold mb-12 text-center text-[#262F58] ${playfairDisplay.className}`}
+          >
+            Réservez Votre Gâteau Personnalisé
+          </motion.h2>
+          <div className="text-center">
+            <p className="text-lg mb-8 text-[#262F58]">
+              Créez le gâteau de vos rêves pour votre occasion spéciale. Nos pâtissiers experts donneront vie à votre vision.
+            </p>
+            <Link href="/reservation">
+              <Button className={`bg-[#262F58] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-opacity-90 transition duration-300 ${playfairDisplay.className}`}>
+                Réserver Votre Gâteau Personnalisé
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Testimonials */}
       <section className="py-20 px-4 md:px-0 bg-white">

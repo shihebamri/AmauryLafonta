@@ -28,6 +28,11 @@ const slideIn = {
 export default function ContactPage() {
   const [isScrolled, setIsScrolled] = useState(false)
   const controls = useAnimation()
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,51 +46,73 @@ export default function ContactPage() {
     controls.start('visible')
   }, [controls])
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const whatsappMessage = `Nom: ${formData.name}%0AEmail: ${formData.email}%0AMessage: ${formData.message}`
+    const whatsappUrl = `https://wa.me/Y+21653400440?text=${whatsappMessage}`
+    window.open(whatsappUrl, '_blank')
+  }
+
   return (
     <div className={`bg-[#262F58] text-white min-h-screen ${cormorantGaramond.className}`}>
       {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#262F58] py-2' : 'bg-transparent py-4'}`}>
-        <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
-          <Link href="/" >
-            <img src="/logo.jpg" alt="Amaury Lafonta" className="w-12 h-12 rounded-full" />
+<nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#262F58] py-2' : 'bg-transparent py-4'}`}>
+  <div className="container mx-auto px-6 flex justify-between items-center">
+    <Link href="/" >
+      <img src="/logo.jpg" alt="Amaury Lafonta" className="w-12 h-12 rounded-full" />
+    </Link>
+    <div className="hidden md:flex space-x-6">
+      <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        Menu
+      </Link>
+      <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        À propos
+      </Link>
+      <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        Contact
+      </Link>
+      <Link href="/res" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+        Réservation
+      </Link>
+    </div>
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline" size="icon" className="md:hidden">
+          <Menu className="h-6 w-6 text-white" />
+          <span className="sr-only">Toggle menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="right" className="bg-[#262F58] p-6 w-64">
+        <div className="flex flex-col space-y-4">
+          <Link href="/" className={`text-2xl font-bold text-white mb-6 ${playfairDisplay.className}`}>
+            Amaury Lafonta
           </Link>
-          <div className="hidden md:flex space-x-6">
-            <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-              Menu
-            </Link>
-            <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-              À propos
-            </Link>
-            <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-              Contact
-            </Link>
-          </div>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden">
-                <Menu className="h-6 w-6 text-white" />
-                <span className="sr-only">Ouvrir le menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="bg-[#262F58] p-6 w-64">
-              <div className="flex flex-col space-y-4">
-                <Link href="/" className={`text-2xl font-bold text-white mb-6 ${playfairDisplay.className}`}>
-                  Amaury Lafonta
-                </Link>
-                <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-                  Menu
-                </Link>
-                <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-                  À propos
-                </Link>
-                <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-                  Contact
-                </Link>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            Menu
+          </Link>
+          <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            À propos
+          </Link>
+          <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            Contact
+          </Link>
+          <Link href="/res" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+            Réservation
+          </Link>
         </div>
-      </nav>
+      </SheetContent>
+    </Sheet>
+  </div>
+</nav>
+
 
       {/* Hero Section */}
       <Parallax
@@ -136,20 +163,43 @@ export default function ContactPage() {
               variants={slideIn}
             >
               <h2 className={`text-3xl md:text-4xl font-bold mb-6 text-[#262F58] ${playfairDisplay.className}`}>Envoyez-nous un message</h2>
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-[#262F58] mb-1">Nom</label>
-                  <Input id="name" placeholder="Votre nom" className="w-full px-3 py-2 border border-[#262F58] rounded-md" />
+                  <Input 
+                    id="name" 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Votre nom" 
+                    className="w-full px-3 py-2 border border-[#262F58] rounded-md" 
+                  />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-[#262F58] mb-1">Email</label>
-                  <Input id="email" type="email" placeholder="Votre email" className="w-full px-3 py-2 border border-[#262F58] rounded-md" />
+                  <Input 
+                    id="email" 
+                    name="email"
+                    type="email" 
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Votre email" 
+                    className="w-full px-3 py-2 border border-[#262F58] rounded-md" 
+                  />
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-[#262F58] mb-1">Message</label>
-                  <Textarea id="message" placeholder="Votre message" className="w-full px-3 py-2 border border-[#262F58] rounded-md" rows={4} />
+                  <Textarea 
+                    id="message" 
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="Votre message" 
+                    className="w-full px-3 py-2 border border-[#262F58] rounded-md" 
+                    rows={4} 
+                  />
                 </div>
-                <Button className={`bg-[#262F58] text-white px-6 py-2 rounded-md hover:bg-opacity-90 transition duration-300 ${playfairDisplay.className}`}>
+                <Button type="submit" className={`bg-[#262F58] text-white px-6 py-2 rounded-md hover:bg-opacity-90 transition duration-300 ${playfairDisplay.className}`}>
                   Envoyer
                 </Button>
               </form>
