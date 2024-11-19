@@ -1,17 +1,24 @@
-"use client"
-import { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button"; // Assuming ShadCN uses Button and Input components
 import { Input } from "@/components/ui/input"; 
 const encodedPassword = "K2FtYXVyeUxBRk9OVEEjIyM=";
 
-const AuthPage = ({ onAuthSuccess }: { onAuthSuccess: () => void }) => {
+const AuthPage = ({ onAuthSuccess }: { onAuthSuccess?: () => void }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  // Check if already authenticated and redirect
+  useEffect(() => {
+    if (sessionStorage.getItem("authenticated") === "true" && onAuthSuccess) {
+      onAuthSuccess();
+    }
+  }, [onAuthSuccess]);
 
   const handleLogin = () => {
     if (btoa(password) === encodedPassword) {
       sessionStorage.setItem("authenticated", "true");
-      onAuthSuccess(); // Trigger success callback
+      if (onAuthSuccess) onAuthSuccess(); // Trigger success callback if provided
     } else {
       setError("Invalid password");
     }
@@ -25,6 +32,7 @@ const AuthPage = ({ onAuthSuccess }: { onAuthSuccess: () => void }) => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Enter password"
+        aria-label="Password"
       />
       {error && <p className="text-red-500 mt-2">{error}</p>}
       <Button onClick={handleLogin} className="mt-4">

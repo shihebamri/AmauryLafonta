@@ -26,6 +26,12 @@
           "price": "6,00 €",
           "description": "Gâteau à couches de biscuit Joconde, crème au beurre café, et ganache chocolat",
           "image": "/g.jpg"
+        },
+        {
+          "name": "test",
+          "price": "10",
+          "description": "12",
+          "image": "/ec2d42e5-.png"
         }
       ]
     }
