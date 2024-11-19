@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, useAnimation, AnimatePresence } from 'framer-motion'
@@ -15,37 +15,8 @@ import { Playfair_Display, Cormorant_Garamond } from 'next/font/google'
 const playfairDisplay = Playfair_Display({ subsets: ['latin'] })
 const cormorantGaramond = Cormorant_Garamond({ subsets: ['latin'], weight: ['300', '400', '600'] })
 
-const menuCategories = [
-  {
-    "name": "Gâteaux",
-    "items": [
-      {
-        "name": "Éclair au Chocolat",
-        "price": "4,00 €",
-        "description": "Pâtisserie à base de pâte à choux, fourrée de crème au chocolat",
-        "image": "/g.jpg"
-      },
-      {
-        "name": "Tarte aux Fraises",
-        "price": "5,50 €",
-        "description": "Tarte garnie de crème pâtissière et de fraises fraîches",
-        "image": "/g.jpg"
-      },
-      {
-        "name": "Mille-Feuille",
-        "price": "4,50 €",
-        "description": "Feuilleté à la crème pâtissière vanille",
-        "image": "/g.jpg"
-      },
-      {
-        "name": "Opéra",
-        "price": "6,00 €",
-        "description": "Gâteau à couches de biscuit Joconde, crème au beurre café, et ganache chocolat",
-        "image": "/g.jpg"
-      }
-    ]
-  }
-];
+// Import the menu data
+import menuData from '../../menu.json'
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -58,14 +29,14 @@ const fadeIn = {
 
 export default function MenuPage() {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [activeCategory, setActiveCategory] = useState(menuCategories[0].name)
+  const [activeCategory, setActiveCategory] = useState('')
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [cart, setCart] = useState<Array<{ name: string; price: string; quantity: number }>>([])
   const [isCartOpen, setIsCartOpen] = useState(false)
 
   useEffect(() => {
-    if (menuCategories.length > 0) {
-      setActiveCategory(menuCategories[0].name);
+    if (menuData.categories.length > 0) {
+      setActiveCategory(menuData.categories[0].name);
     }
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
@@ -119,55 +90,54 @@ export default function MenuPage() {
   return (
     <div className={`bg-[#262F58] text-white min-h-screen ${cormorantGaramond.className}`}>
       {/* Navigation */}
-<nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#262F58] py-2' : 'bg-transparent py-4'}`}>
-  <div className="container mx-auto px-6 flex justify-between items-center">
-    <Link href="/" >
-      <img src="/logo.jpg" alt="Amaury Lafonta" className="w-12 h-12 rounded-full" />
-    </Link>
-    <div className="hidden md:flex space-x-6">
-      <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-        Menu
-      </Link>
-      <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-        À propos
-      </Link>
-      <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-        Contact
-      </Link>
-      <Link href="/res" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-        Réservation
-      </Link>
-    </div>
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="md:hidden">
-          <Menu className="h-6 w-6 text-white" />
-          <span className="sr-only">Toggle menu</span>
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="right" className="bg-[#262F58] p-6 w-64">
-        <div className="flex flex-col space-y-4">
-          <Link href="/" className={`text-2xl font-bold text-white mb-6 ${playfairDisplay.className}`}>
-            Amaury Lafonta
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#262F58] py-2' : 'bg-transparent py-4'}`}>
+        <div className="container mx-auto px-6 flex justify-between items-center">
+          <Link href="/" >
+            <img src="/logo.jpg" alt="Amaury Lafonta" className="w-12 h-12 rounded-full" />
           </Link>
-          <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-            Menu
-          </Link>
-          <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-            À propos
-          </Link>
-          <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-            Contact
-          </Link>
-          <Link href="/res" className="text-white hover:text-gray-300 transition duration-300 text-lg">
-            Réservation
-          </Link>
+          <div className="hidden md:flex space-x-6">
+            <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+              Menu
+            </Link>
+            <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+              À propos
+            </Link>
+            <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+              Contact
+            </Link>
+            <Link href="/res" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+              Réservation
+            </Link>
+          </div>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="md:hidden">
+                <Menu className="h-6 w-6 text-white" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="bg-[#262F58] p-6 w-64">
+              <div className="flex flex-col space-y-4">
+                <Link href="/" className={`text-2xl font-bold text-white mb-6 ${playfairDisplay.className}`}>
+                  Amaury Lafonta
+                </Link>
+                <Link href="/menu" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+                  Menu
+                </Link>
+                <Link href="/about" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+                  À propos
+                </Link>
+                <Link href="/contact" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+                  Contact
+                </Link>
+                <Link href="/res" className="text-white hover:text-gray-300 transition duration-300 text-lg">
+                  Réservation
+                </Link>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
-      </SheetContent>
-    </Sheet>
-  </div>
-</nav>
-
+      </nav>
 
       {/* Hero Section */}
       <Parallax
@@ -214,7 +184,7 @@ export default function MenuPage() {
           <div className="relative mb-8">
             <ScrollArea className="w-full whitespace-nowrap rounded-md border border-[#262F58]">
               <div className="flex space-x-4 p-4" ref={scrollContainerRef}>
-                {menuCategories.map((category) => (
+                {menuData.categories.map((category) => (
                   <Button
                     key={category.name}
                     variant={activeCategory === category.name ? "default" : "outline"}
@@ -232,7 +202,7 @@ export default function MenuPage() {
             </ScrollArea>
           </div>
 
-          {menuCategories.map((category) => (
+          {menuData.categories.map((category) => (
             category.name === activeCategory && (
               <motion.div
                 key={category.name}
@@ -305,7 +275,6 @@ export default function MenuPage() {
               <SheetContent side="bottom" className="bg-white rounded-t-3xl">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className={`text-2xl font-bold text-[#262F58] ${playfairDisplay.className}`}>Votre Commande</h2>
-
                 </div>
                 <ScrollArea className="h-[50vh]">
                   {cart.map((item, index) => (

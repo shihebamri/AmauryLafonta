@@ -1,0 +1,33 @@
+{
+    "categories": [
+      {
+        "name": "Gâteaux",
+        "items": [
+          {
+            "name": "Éclair au Chocolat",
+            "price": "4,00 €",
+            "description": "Pâtisserie à base de pâte à choux, fourrée de crème au chocolat",
+            "image": "/g.jpg"
+          },
+          {
+            "name": "Tarte aux Fraises",
+            "price": "5,50 €",
+            "description": "Tarte garnie de crème pâtissière et de fraises fraîches",
+            "image": "/g.jpg"
+          },
+          {
+            "name": "Mille-Feuille",
+            "price": "4,50 €",
+            "description": "Feuilleté à la crème pâtissière vanille",
+            "image": "/g.jpg"
+          },
+          {
+            "name": "Opéra",
+            "price": "6,00 €",
+            "description": "Gâteau à couches de biscuit Joconde, crème au beurre café, et ganache chocolat",
+            "image": "/g.jpg"
+          }
+        ]
+      }
+    ]
+  }
