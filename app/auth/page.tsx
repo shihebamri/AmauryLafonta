@@ -1,4 +1,3 @@
-// components/AuthPage.tsx
 "use client"
 import { useState } from "react";
 import { Button } from "@/components/ui/button"; // Assuming ShadCN uses Button and Input components
@@ -12,7 +11,7 @@ const AuthPage = ({ onAuthSuccess }: { onAuthSuccess: () => void }) => {
   const handleLogin = () => {
     if (btoa(password) === encodedPassword) {
       sessionStorage.setItem("authenticated", "true");
-      onAuthSuccess();
+      onAuthSuccess(); // Trigger success callback
     } else {
       setError("Invalid password");
     }
